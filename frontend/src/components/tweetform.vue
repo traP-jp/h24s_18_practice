@@ -1,22 +1,46 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount  } from "vue";
 
 interface Item {
   name: string;
-  time: number;
+  time: string;
 }
 
-const items = ref<Item[]>([
-  { name: "お腹空いた", time: 100 },
-  { name: "ねむいよー", time: 160 },
-]);
+
 
 const newTweet = ref("");
-const newTime = ref();
+const newTime = ref("");
+let startTime = "";
+
+
+const interval = ref()
+onMounted(() => {
+  setInterval(() => {
+    let time = new Date();
+    let hour = time.getHours();
+    let minute = time.getMinutes();
+    let second = time.getSeconds();
+    newTime.value = hour + "時" + minute + "分" + second + "秒";
+  }, 1000);
+  
+});
+
+onBeforeUnmount(() => {
+    if(interval.value){
+        clearInterval(interval.value);
+    }
+})
+
+const items = ref<Item[]>([
+  { name: "お腹空いた", time:  "1時15分33秒"},
+  { name: "ねむいよー",time: "1時15分33秒"},
+]);
 
 const addItem = () => {
-  items.value.unshift({ name: newTweet.value, time: newTime.value });
+  items.value.unshift({ name: newTweet.value, time:newTime.value});
 };
+
+
 </script>
 
 <template>
@@ -26,11 +50,8 @@ const addItem = () => {
         ツイート
         <input v-model="newTweet" type="text" />
       </label>
-      <label>
-        時間
-        <input v-model="newTime" type="number" />
-      </label>
-      <button @click="addItem(), (newTweet = ''), (newTime = ref())">
+
+      <button @click="addItem(), (newTweet = '')">
         tweet
       </button>
       <button @click="items = []">ツイート全部消す</button>
@@ -40,7 +61,7 @@ const addItem = () => {
         <li v-for="item in items.slice()" :key="item.name">
           <div>
             tweet: {{ item.name }} &emsp;&emsp;&emsp;&emsp;&emsp;time
-            {{ item.time }}
+            {{ item.time}}
           </div>
         </li>
       </ul>
