@@ -1,17 +1,31 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import { RouterLink, RouterView } from "vue-router";
+import { store } from "./store";
 </script>
 
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <h1>Hello App!</h1>
+    <p><strong>Current route path:</strong> {{ $route.fullPath }}</p>
+    <div><RouterLink to="/">Home</RouterLink></div>
+    <div>
+      <label for="userId">User ID:</label>
+      <input
+        id="userId"
+        type="text"
+        v-model="store.user.id"
+        placeholder="Enter user ID"
+      />
+    </div>
+    <div>
+      <RouterLink :to="{ name: 'User', params: { id: store.user.id } }"
+        >User</RouterLink
+      >
+    </div>
+    <main>
+      <RouterView />
+    </main>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>
