@@ -10,7 +10,6 @@ interface Item {
 
 const newTweet = ref("");
 const newTime = ref("");
-let startTime = "";
 
 
 const interval = ref()
